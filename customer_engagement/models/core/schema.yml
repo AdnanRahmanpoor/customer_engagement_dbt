@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: fct_daily_active_users
+    description: "Daily count of unique active users"
+    columns:
+      - name: activity_date
+        tests: [not_null]
+      - name: dau
+        tests: [not_null]
+
+  - name: fct_purchases
+    description: "Aggregated number of purchases per customer"
+    columns:
+      - name: customer_id
+        tests: [not_null]
+      - name: total_purchases
+        tests: [not_null]
+
+  - name: dim_customer_lifecycle
+    description: "Customer lifecycle status (active, dormant, churned)"
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: status
+        tests: [not_null]
