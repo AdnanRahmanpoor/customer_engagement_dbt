@@ -9,7 +9,8 @@ renamed as (
     customer_id,
     created_at,
     lower(country) as country,
-    lower(device_type) as device_type
+    lower(device_type) as device_type,
+    lower(signup_channel) as signup_channel
   from source
 )
 

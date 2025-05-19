@@ -3,7 +3,8 @@
 with customers as (
     select
         customer_id,
-        created_at
+        created_at,
+        signup_channel
     from {{ ref('stg_customers') }}
 ),
 
@@ -19,6 +20,7 @@ lifecycle as (
     select
         c.customer_id,
         c.created_at as signup_date,
+        c.signup_channel,
         e.last_event_time,
         date_diff(current_date(), date(e.last_event_time), day) as days_since_last_activity,
         case
