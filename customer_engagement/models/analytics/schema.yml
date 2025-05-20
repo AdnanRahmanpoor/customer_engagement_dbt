@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: funnel_conversion
+    description: "Tracks user conversion through key funnel stages (signup, login, purchase)"
+    columns:
+      - name: stage
+        description: "The funnel stage (signup, login, or purchase)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['signup', 'login', 'purchase']
+      - name: users
+        description: "Count of distinct users at each funnel stage"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_events')
+              field: customer_id
+              severity: warn
+
+  - name: retention_cohorts
+    description: "Calculates monthly retention rates by user signup cohorts"
+    columns:
+      - name: signup_month
+        description: "Month when users signed up (cohort)"
+        tests:
+          - not_null
+      - name: months_since_signup
+        description: "Number of months since the signup month (0 = signup month)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+              severity: warn
+      - name: active_users
+        description: "Count of users who logged in during this month"
+        tests:
+          - not_null
+      - name: total_signups
+        description: "Total users who signed up in this cohort"
+        tests:
+          - not_null
+      - name: retention_rate
+        description: "Percentage of signups who were active (active_users/total_signups)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_events')
+              field: customer_id
+              severity: warn
